@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using WebApi.Common;
+using Microsoft.EntityFrameworkCore;
 using WebApi.DbOperations;
 
 namespace WebApi.BookOperations.GetBooks
@@ -20,17 +18,8 @@ namespace WebApi.BookOperations.GetBooks
         }
 
         public List<BooksViewModel> Handle(){// İSTEDİĞİM VERİ TİPİNİN UI dönmesini istiyorum. O yüzden aşağıda viewmodel kuralım.
-            var bookList = _dbContext.Books.OrderBy(x=>x.Id).ToList<Book>();
+            var bookList = _dbContext.Books.Include(x=>x.Genre).Include(x=>x.Author).OrderBy(x=>x.Id).ToList<Entities.Book>();
             List<BooksViewModel> vm = _mapper.Map<List<BooksViewModel>>(bookList);//new List<BooksViewModel>();
-            // foreach (var book in bookList){
-            //     vm.Add(new BooksViewModel()
-            //     {
-            //         Title = book.Title,
-            //         Genre = ((GenreEnum)book.GenreId).ToString(),
-            //         PublishDate = book.PublishDate.Date.ToString("dd/MM/yyyy"),
-            //         PageCount = book.PageCount
-            //     });
-            // }
             return vm;
         }
 
@@ -40,5 +29,7 @@ namespace WebApi.BookOperations.GetBooks
         public int PageCount { get; set; }
         public string PublishDate { get; set; }
         public string Genre { get; set; }
+        public string Author { get; set; }
+       
     }
 }

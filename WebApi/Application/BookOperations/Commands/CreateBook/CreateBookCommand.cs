@@ -1,13 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using WebApi.Common;
 using WebApi.DbOperations;
 
 namespace WebApi.BookOperations.CreateBook
-{  
+{
     public class CreateBookCommand
     {
         public CreateBookModel Model { get; set; } 
@@ -23,11 +20,7 @@ namespace WebApi.BookOperations.CreateBook
             var book = _dbContext.Books.SingleOrDefault( x=>x.Title == Model.Title);
             if(book is not null)
                 throw new InvalidOperationException("Kitap zaten mevcut.");
-            book = _mapper.Map<Book>(Model);//new Book();//entity yaratıp 
-            // book.Title = Model.Title;//gelen model içerisinden setledim.
-            // book.PublishDate = Model.PublishDate;
-            // book.PageCount = Model.PageCount;
-            // book.GenreId = Model.GenreId;
+            book = _mapper.Map<Entities.Book>(Model);
             _dbContext.Books.Add(book);
             _dbContext.SaveChanges();
         }

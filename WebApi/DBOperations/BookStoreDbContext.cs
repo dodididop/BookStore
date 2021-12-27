@@ -13,7 +13,9 @@ namespace WebApi.DbOperations
 
         //Books nesnesini kullanıldı. db de kullancak isim çoğul olur.
         //Book bir replica databaseden:
-        public DbSet<Book> Books {get;set;}
+        public DbSet<Entities.Book> Books {get;set;}
+        public DbSet<Entities.Genre> Genres {get;set;}
+        public DbSet<Entities.Author> Authors {get;set;}
 
     }
 }

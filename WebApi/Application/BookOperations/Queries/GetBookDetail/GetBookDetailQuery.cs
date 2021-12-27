@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using WebApi.Common;
+using Microsoft.EntityFrameworkCore;
 using WebApi.DbOperations;
 
 namespace WebApi.BookOperations.GetBookDetail
@@ -20,16 +18,12 @@ namespace WebApi.BookOperations.GetBookDetail
             _mapper = mapper;
         }
         public BookDetailViewModel Handle(){
-         var book = _dbContext.Books.Where(book=>book.Id == BookId).SingleOrDefault();
+         var book = _dbContext.Books.Include(x=>x.Genre).Include(x=>x.Author).Where(book=>book.Id == BookId).SingleOrDefault();
          if(book is null)
             throw new InvalidOperationException("Kitap bulunamadı.");
             
         //book view modele maplemem lazım
         BookDetailViewModel vm = _mapper.Map<BookDetailViewModel>(book);//new BookDetailViewModel();
-        // vm.Title = book.Title;
-        // vm.PageCount = book.PageCount;
-        // vm.PublishDate = book.PublishDate.Date.ToString("dd/mm/yyyy");
-        // vm.Genre = ((GenreEnum)book.GenreId).ToString();
         return vm;
         }   
     }
@@ -38,6 +32,7 @@ namespace WebApi.BookOperations.GetBookDetail
         public int PageCount { get; set; }
         public string PublishDate { get; set; }
         public string Genre { get; set; }
+        public string Author { get; set; }
     }
 
 }
